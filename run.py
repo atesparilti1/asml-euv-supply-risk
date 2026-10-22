@@ -34,7 +34,8 @@ def describe(dist) -> str:
     if name == "beta":
         return f"Beta({a[0]:g}, {a[1]:g})" + (f" on [{loc:g}, {loc + scale:g}]" if (loc, scale) != (0, 1) else "")
     if name == "uniform":
-        return f"Uniform({loc:g}, {loc + scale:g})"
+        lo, width = (a + [0, 1])[:2] if a else (loc, scale)
+        return f"Uniform({lo:g}, {lo + width:g})"
     if name == "triang":
         c = dist.kwds.get("c", a[0] if a else 0.5)
         return f"Triangular({loc:g}, {loc + c * scale:g}, {loc + scale:g})"

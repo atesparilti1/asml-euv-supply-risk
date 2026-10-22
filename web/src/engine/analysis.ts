@@ -34,7 +34,10 @@ export function prob(x: Float64Array, test: (v: number) => boolean): Prob {
 
 export function histogram(x: Float64Array, bins: number, lo: number, hi: number): Hist {
   const counts = new Array(bins).fill(0), w = (hi - lo) / bins;
-  for (let i = 0; i < x.length; i++) counts[Math.min(bins - 1, Math.max(0, Math.floor((x[i] - lo) / w)))]++;
+  for (let i = 0; i < x.length; i++) {
+    const k = Math.floor((x[i] - lo) / w);
+    if (k >= 0 && k < bins) counts[k]++;   // tails beyond the 0.5th/99.5th percentiles are left out
+  }
   return { edges: Array.from({ length: bins + 1 }, (_, k) => lo + k * w), counts };
 }
 

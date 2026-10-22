@@ -277,7 +277,7 @@ def fan(x: np.ndarray):
 def histogram(x, bins=60, lo=None, hi=None):
     lo = float(np.percentile(x, 0.5)) if lo is None else lo
     hi = float(np.percentile(x, 99.5)) if hi is None else hi
-    c, e = np.histogram(np.clip(x, lo, hi), bins=bins, range=(lo, hi))
+    c, e = np.histogram(x, bins=bins, range=(lo, hi))     # values outside [lo, hi] are left out, not piled into the edge bins
     return {"edges": e.tolist(), "counts": c.tolist()}
 
 

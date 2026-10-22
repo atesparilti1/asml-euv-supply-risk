@@ -6,4 +6,5 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   base: "./",
   plugins: [react(), tailwindcss()],
+  build: { chunkSizeWarningLimit: 900 },   // KaTeX + exported results; one page, so one chunk is fine
 });
