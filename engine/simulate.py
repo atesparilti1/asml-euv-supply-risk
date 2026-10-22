@@ -117,7 +117,7 @@ def capacity(params: dict) -> np.ndarray:
 
 # ---------------------------------------------------------------- dynamics
 def core(orders, cap, lam, yld, beta, cancel, buffers, stress, shocks, *, disruptions=True,
-         duration="lognormal", keep_paths=True):
+         duration="lognormal", keep_paths=True, kappa=A.YIELD_STRESS_KAPPA):
     """
     Month-by-month flow for all paths at once.
 
@@ -125,7 +125,7 @@ def core(orders, cap, lam, yld, beta, cancel, buffers, stress, shocks, *, disrup
     yld (N,M) qualification yield · beta (N,) stress sensitivity · cancel (N,) monthly hazard
     buffers (M,P) target safety stock · stress (T,N)
     """
-    n = orders.shape[1]
+    T, n = orders.shape[:2]
     B = np.asarray(buffers, np.int64)
     inv = np.broadcast_to(B, (n, M, P)).copy()          # buffers are in place at the start
     late = np.zeros((n, P), np.int64)
@@ -169,7 +169,7 @@ def core(orders, cap, lam, yld, beta, cancel, buffers, stress, shocks, *, disrup
         sup_credit = np.minimum(sup_credit + cs, cs + 1)
         started = np.minimum(np.floor(sup_credit).astype(np.int64), request)
         sup_credit -= started
-        p_ok = yld[:, :, None] * np.exp(-A.YIELD_STRESS_KAPPA * np.maximum(s, 0))[:, None, None]
+        p_ok = yld[:, :, None] * np.exp(-kappa * np.maximum(s, 0))[:, None, None]
         good = binom_inv(shocks["u_yield"][t], started, p_ok)
         inv += good
         produced += good
@@ -208,7 +208,8 @@ def run(cfg: A.Config, shocks: dict | None = None) -> dict:
     yld = np.stack([prm[f"yield_{m}"] for m in A.MODULES], axis=1)
     buffers = np.array([cfg.buffers[m] for m in A.MODULES])
     out = core(orders, cap, lam, yld, prm["beta_stress"] * cfg.stress_scale, prm["cancel_hazard"], buffers, stress,
-               shocks, disruptions=cfg.disruptions, duration=cfg.duration, keep_paths=cfg.keep_paths)
+               shocks, disruptions=cfg.disruptions, duration=cfg.duration, keep_paths=cfg.keep_paths,
+               kappa=A.YIELD_STRESS_KAPPA * cfg.stress_scale)
 
     asp = np.array([A.ASP[p] for p in A.PRODUCTS], float).T                       # (Y, P)
     ship_y = out["ship"].reshape(Y, 12, n, P).sum(axis=1).transpose(1, 0, 2)      # (N, Y, P)

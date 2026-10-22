@@ -140,7 +140,7 @@ def validate(cfg: Config) -> None:
         raise ValueError(f"param_mode must be 'full' or 'central', got {cfg.param_mode!r}.")
     duration_dist(cfg.duration)
     if not 0 <= cfg.stress_scale <= 3:
-        raise ValueError(f"stress_scale must be within [0, 3] (got {cfg.stress_scale}); gamma_demand x scale must stay <= 1.")
+        raise ValueError(f"stress_scale must be within [0, 3] (got {cfg.stress_scale}); 0 = independent inputs, 1 = central case, 2 = doubled dependence.")
     if set(cfg.buffers) != set(MODULES):
         raise ValueError(f"buffers needs exactly the modules {MODULES}, got {sorted(cfg.buffers)}.")
     for m, b in cfg.buffers.items():
