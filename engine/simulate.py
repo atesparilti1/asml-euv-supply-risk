@@ -140,6 +140,7 @@ def core(orders, cap, lam, yld, beta, cancel, buffers, stress, shocks, *, disrup
     lost = np.zeros((T, n, P), np.int64)
     produced = np.zeros((n, M, P), np.int64)
     disrupted = np.zeros((n, M), np.int64)
+    late_months = np.zeros((n, P), np.int64)       # unit-months of lateness (each late system adds 1 per month)
     late_t = np.zeros((T, n, P), np.int32) if keep_paths else None
     inv_t = np.zeros((T, n, M, P), np.int32) if keep_paths else None
     down_t = np.zeros((T, n, M), np.float32) if keep_paths else None
@@ -185,13 +186,14 @@ def core(orders, cap, lam, yld, beta, cancel, buffers, stress, shocks, *, disrup
         # 5. some customers cancel while they wait
         lost[t] = binom_inv(shocks["u_cancel"][t], late, cancel[:, None])
         late -= lost[t]
+        late_months += late
         remaining = np.maximum(remaining - 1, 0)
 
         if keep_paths:
             late_t[t], inv_t[t], down_t[t] = late, inv, 1 - avail
 
     return {"ship": ship, "ontime": ontime, "lost": lost, "late_end": late, "inv_end": inv, "produced": produced,
-            "disrupted_months": disrupted, "late_t": late_t, "inv_t": inv_t, "down_t": down_t}
+            "disrupted_months": disrupted, "late_months": late_months, "late_t": late_t, "inv_t": inv_t, "down_t": down_t}
 
 
 # ---------------------------------------------------------------- one full run

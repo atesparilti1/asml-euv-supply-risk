@@ -1,0 +1,232 @@
+{
+  "priors": [
+    {
+      "name": "lam_optics",
+      "label": "Disruption rate, optics (Zeiss)",
+      "unit": "events/yr",
+      "dist": "Gamma(shape 2, scale 0.075)",
+      "mean": 0.15,
+      "p5": 0.026652113302399645,
+      "p95": 0.3557898388792933,
+      "why": "Rare events at a mature single-source supplier. Gamma(2) prior because the rate itself is uncertain (mean 0.15).",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "lam_source",
+      "label": "Disruption rate, light source (Cymer)",
+      "unit": "events/yr",
+      "dist": "Gamma(shape 2, scale 0.125)",
+      "mean": 0.25,
+      "p5": 0.044420188837332744,
+      "p95": 0.5929830647988221,
+      "why": "Most complex module (tin-droplet plasma), highest rate (mean 0.25).",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "lam_laser",
+      "label": "Disruption rate, drive laser (Trumpf)",
+      "unit": "events/yr",
+      "dist": "Gamma(shape 2, scale 0.1)",
+      "mean": 0.2,
+      "p5": 0.0355361510698662,
+      "p95": 0.4743864518390577,
+      "why": "High-power CO2 laser, mean 0.20.",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "yield_optics",
+      "label": "Qualification yield, optics",
+      "unit": "share",
+      "dist": "Beta(92, 8)",
+      "mean": 0.92,
+      "p5": 0.8712953969517275,
+      "p95": 0.959156212521104,
+      "why": "Mirrors need picometre surface accuracy, so optics are the hardest to pass (mean 0.92).",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "yield_source",
+      "label": "Qualification yield, light source",
+      "unit": "share",
+      "dist": "Beta(95, 5)",
+      "mean": 0.95,
+      "p5": 0.9099264418080323,
+      "p95": 0.9798912444324113,
+      "why": "Mean 0.95.",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "yield_laser",
+      "label": "Qualification yield, drive laser",
+      "unit": "share",
+      "dist": "Beta(97, 3)",
+      "mean": 0.97,
+      "p5": 0.9377719043132813,
+      "p95": 0.9916905766060132,
+      "why": "Most mature module, mean 0.97.",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "ramp_2027",
+      "label": "Share of the 2027 +30% NXE capacity step achieved",
+      "unit": "share",
+      "dist": "Beta(8, 2)",
+      "mean": 0.8,
+      "p5": 0.5708644529685656,
+      "p95": 0.9589768324930035,
+      "why": "Ramps usually land a little short of plan (mean 0.80). Bounded on [0, 1].",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "ramp_2028",
+      "label": "Share of the 2028 +30% NXE capacity step achieved",
+      "unit": "share",
+      "dist": "Beta(6, 3)",
+      "mean": 0.6666666666666666,
+      "p5": 0.40031061080916697,
+      "p95": 0.8888872933923708,
+      "why": "Only under study in 2026, so less certain (mean 0.67).",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "exe_capacity",
+      "label": "High-NA capacity relative to plan",
+      "unit": "x plan",
+      "dist": "Beta(5, 3) on [0.85, 1.3]",
+      "mean": 1.13125,
+      "p5": 1.0035676462699012,
+      "p95": 1.2420596232380907,
+      "why": "High-NA capacity is not published; mean 1.13x plan, can fall below plan (min 0.85).",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "beta_stress",
+      "label": "Disruption sensitivity to industry stress",
+      "unit": "log-rate per sd",
+      "dist": "Uniform(0, 1)",
+      "mean": 0.55,
+      "p5": 0.325,
+      "p95": 0.7749999999999999,
+      "why": "Strained suppliers fail more often. A one-sd stress month multiplies the hazard by e^beta.",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "gamma_demand",
+      "label": "Demand loading on industry stress",
+      "unit": "correlation",
+      "dist": "Uniform(0, 1)",
+      "mean": 0.5,
+      "p5": 0.23,
+      "p95": 0.77,
+      "why": "Boom years bring both more orders and more supplier stress.",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "sigma_demand",
+      "label": "Demand volatility",
+      "unit": "log sd",
+      "dist": "Uniform(0, 1)",
+      "mean": 0.1,
+      "p5": 0.064,
+      "p95": 0.136,
+      "why": "Year-level EUV order uncertainty around the DCF plan (central 10%).",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "cancel_hazard",
+      "label": "Late-order cancellation hazard",
+      "unit": "per month",
+      "dist": "Beta(2, 398)",
+      "mean": 0.005,
+      "p5": 0.0008913511265587068,
+      "p95": 0.011833750453181508,
+      "why": "ASML is the only EUV supplier, so customers mostly wait (mean 0.5%/month).",
+      "tag": "ILLUSTRATIVE"
+    },
+    {
+      "name": "theta",
+      "label": "Operating leverage",
+      "unit": "margin per 100% shortfall",
+      "dist": "Triangular(0.1, 0.15, 0.25)",
+      "mean": 0.16666666666666669,
+      "p5": 0.11936491673103708,
+      "p95": 0.22261387212474168,
+      "why": "Fixed R&D and fab cost: a 10% EUV revenue shortfall costs ~1.7 points of EBITDA margin (mean).",
+      "tag": "ILLUSTRATIVE"
+    }
+  ],
+  "fixed": {
+    "plan_units": {
+      "NXE": [
+        75,
+        82,
+        86,
+        88
+      ],
+      "EXE": [
+        10,
+        14,
+        18,
+        22
+      ]
+    },
+    "asp": {
+      "NXE": [
+        260,
+        265,
+        270,
+        275
+      ],
+      "EXE": [
+        360,
+        370,
+        380,
+        390
+      ]
+    },
+    "nxe_capacity_2026": 65.0,
+    "expansion_step": 0.3,
+    "supplier_headroom": 1.1,
+    "module_cost": {
+      "NXE": [
+        40.0,
+        18.0,
+        7.0
+      ],
+      "EXE": [
+        64.0,
+        28.8,
+        11.2
+      ]
+    },
+    "obsolescence": 0.05,
+    "stress_phi": 0.9,
+    "demand_rho": 0.6,
+    "yield_stress_kappa": 0.03,
+    "demand_limits": [
+      0.6,
+      1.5
+    ],
+    "duration_cap": 18,
+    "severity": "Beta(2, 3)",
+    "duration": "Lognormal(median 2 months, sigma 0.8)",
+    "wacc": 0.09377981262700602,
+    "base_price": 935.3017177863445,
+    "market_price": 1611.4,
+    "shares": 384.9
+  },
+  "policy": {
+    "optics": [
+      0,
+      0
+    ],
+    "source": [
+      2,
+      0
+    ],
+    "laser": [
+      5,
+      1
+    ]
+  }
+}
